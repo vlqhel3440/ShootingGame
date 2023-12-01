@@ -38,8 +38,8 @@ class Projectile {
 
   update() {
     this.draw()
-    this.x =this.x + this.velocity.x
-    this.y =this.y + this.velocity.y
+    this.x =this.x + this.velocity.x * 2
+    this.y =this.y + this.velocity.y * 2
   }
 }
 
@@ -75,7 +75,7 @@ const enemise = []
 
 function spawnEnemies() {
   setInterval(() => {
-    const radius = Math.random * (30 - 8) + 8
+    const radius = Math.random() * (30 - 8) + 8
     let x
     let y
     if(Math.random() < 0.5){
@@ -105,8 +105,17 @@ function animate() {
     projectile.update()
   })
 
-  enemise.forEach((enemy) => {
+  enemise.forEach((enemy, index) => {
     enemy.update()
+
+    projectiles.forEach((projectile, projectileIndex) => {
+      const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+      // objects touch
+      if(dist - enemy.radius - projectile.radius < 1) {
+        enemise.splice(index, 1)
+        projectiles.splice(projectileIndex, 1)
+      }
+    })
   })
 }
 
