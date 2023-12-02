@@ -5,6 +5,9 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 const scoreEl = document.querySelector('#scoreEl')
+const startGameBtn = document.querySelector('#startGameBtn')
+const modalEl = document.querySelector('#modalEl')
+const bigScoreEl = document.querySelector('#bigScoreEl')
 
 class Player {
   constructor(x, y, radius, color) {
@@ -102,10 +105,20 @@ class Particle {
 const x = canvas.width / 2
 const y = canvas.height / 2
 
-const player = new Player(x, y, 10, 'white')
-const projectiles = []
-const enemise = []
-const particles = []
+let player = new Player(x, y, 10, 'white')
+let projectiles = []
+let enemise = []
+let particles = []
+
+function init() {
+  player = new Player(x, y, 10, 'white')
+  projectiles = []
+  enemise = []
+  particles = []
+  score = 0
+  scoreEl.innerHTML = score
+  bigScoreEl.innerHTML = score
+}
 
 function spawnEnemies() {
   setInterval(() => {
@@ -164,6 +177,9 @@ function animate() {
     // end game
     if(dist - enemy.radius - player.radius < 1){
       cancelAnimationFrame(animationId)
+      modalEl.style.display = 'flex'
+      bigScoreEl.innerHTML = score
+      startGameBtn.innerHTML = "Restart Game"
     }
     //when projectiles touch enemy
     projectiles.forEach((projectile, projectileIndex) => {
@@ -216,5 +232,9 @@ addEventListener('click', (event) => {
   ))
 })
 
-animate()
-spawnEnemies()
+startGameBtn.addEventListener('click', () => {
+  init()
+  animate()
+  spawnEnemies()
+  modalEl.style.display = 'none'
+})
