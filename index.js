@@ -124,15 +124,22 @@ function animate() {
     if(dist - enemy.radius - player.radius < 1){
       cancelAnimationFrame(animationId)
     }
-
+    //when projectiles touch enemy
     projectiles.forEach((projectile, projectileIndex) => {
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
       // objects touch
       if(dist - enemy.radius - projectile.radius < 1) {
-        setTimeout(() => {
-          enemise.splice(index, 1)
-          projectiles.splice(projectileIndex, 1)
-        }, 0)
+        if(enemy.radius - 8 > 10) {
+          enemy.radius -= 10
+          setTimeout(() => {
+            projectiles.splice(projectileIndex, 1)
+          }, 0)
+        } else {
+          setTimeout(() => {
+            enemise.splice(index, 1)
+            projectiles.splice(projectileIndex, 1)
+          }, 0)
+        }
       }
     })
   })
